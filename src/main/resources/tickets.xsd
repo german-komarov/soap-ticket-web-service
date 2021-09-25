@@ -1,0 +1,268 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost:8080/tickets"
+           targetNamespace="http://localhost:8080/tickets" elementFormDefault="qualified">
+
+
+    <xs:element name="createUserRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="tns:createUserDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="createUserResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="createUserDto">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+            <xs:element name="confirmPassword" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="topUpBalanceRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="topUpBalanceData" type="tns:topUpBalanceDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="topUpBalanceResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="retrieveClientInformationRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clientCredentials" type="tns:userCredentialsDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="retrieveClientInformationResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clientInformation" type="tns:userInformationDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="userCredentialsDto">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="userInformationDto">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="balance" type="xs:float"/>
+            <xs:element name="boughtTicket" type="tns:boughtTicketDto" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="boughtTicketDto">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="from" type="xs:string"/>
+            <xs:element name="to" type="xs:string"/>
+            <xs:element name="airline" type="xs:string"/>
+            <xs:element name="salonClass" type="tns:salonClass"/>
+            <xs:element name="dateTime" type="xs:string"/>
+            <xs:element name="place" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="bankCardCredentialsDto">
+        <xs:sequence>
+            <xs:element name="cardNumber" type="xs:string"/>
+            <xs:element name="cvv" type="xs:string"/>
+            <xs:element name="expirationDate" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="topUpBalanceDto">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="bankCardCredentials" type="tns:bankCardCredentialsDto"/>
+            <xs:element name="moneyAmount" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="retrieveTicketRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ticketCriteria" type="tns:requestTicketDto" nillable="true"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="retrieveTicketResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ticket" type="tns:responseTicketDto" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="currentPage" type="xs:int"/>
+                <xs:element name="hasNext" type="xs:boolean"/>
+                <xs:element name="sortedBy" type="tns:sortBy"/>
+                <xs:element name="sortedDirection" type="tns:sortDirection"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="requestTicketDto">
+        <xs:sequence>
+            <xs:element name="from" type="xs:string"/>
+            <xs:element name="to" type="xs:string"/>
+            <xs:element name="airline" type="xs:string"/>
+            <xs:element name="maxPrice" type="xs:float"/>
+            <xs:element name="salonClass" type="tns:salonClassRequest"/>
+            <xs:element name="minDateTime" type="xs:string"/>
+            <xs:element name="maxDateTime" type="xs:string"/>
+            <xs:element name="pageNumber" type="xs:int" default="0"/>
+            <xs:element name="pageSize" type="xs:int" default="10"/>
+            <xs:element name="sortBy" type="tns:sortBy"/>
+            <xs:element name="sortDirection" type="tns:sortDirection"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="responseTicketDto">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="from" type="xs:string"/>
+            <xs:element name="to" type="xs:string"/>
+            <xs:element name="airline" type="xs:string"/>
+            <xs:element name="price" type="xs:float"/>
+            <xs:element name="salonClass" type="tns:salonClass"/>
+            <xs:element name="dateTime" type="xs:string"/>
+            <xs:element name="freePlaces" type="tns:integerList"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="createTicketRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="creatorCredentials" type="tns:userCredentialsDto"/>
+                <xs:element name="ticket" type="tns:createTicketDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="createTicketResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="status" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="createTicketDto">
+        <xs:sequence>
+            <xs:element name="from" type="xs:string"/>
+            <xs:element name="to" type="xs:string"/>
+            <xs:element name="airline" type="xs:string"/>
+            <xs:element name="price" type="xs:float"/>
+            <xs:element name="numberOfPlaces" type="xs:int"/>
+            <xs:element name="salonClass" type="tns:salonClass"/>
+            <xs:element name="dateTime" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:element name="buyTicketRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ticket" type="tns:buyTicketDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="buyTicketResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="buyTicketDto">
+        <xs:sequence>
+            <xs:element name="buyerCredentials" type="tns:userCredentialsDto"/>
+            <xs:element name="ticketId" type="xs:long"/>
+            <xs:element name="places" type="tns:integerList"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:simpleType name="salonClass">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ECONOMY"/>
+            <xs:enumeration value="BUSINESS"/>
+            <xs:enumeration value="FIRST"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="salonClassRequest">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ECONOMY"/>
+            <xs:enumeration value="BUSINESS"/>
+            <xs:enumeration value="FIRST"/>
+            <xs:enumeration value="ECONOMY_BUSINESS"/>
+            <xs:enumeration value="BUSINESS_FIRST"/>
+            <xs:enumeration value="ECONOMY_FIRST"/>
+            <xs:enumeration value="ANY"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="sortBy">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DATE"/>
+            <xs:enumeration value="PRICE"/>
+            <xs:enumeration value="SALON_CLASS"/>
+            <xs:enumeration value="NONE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="sortDirection">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ASC"/>
+            <xs:enumeration value="DESC"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="integerList">
+        <xs:list itemType="xs:int"/>
+    </xs:simpleType>
+
+</xs:schema>
